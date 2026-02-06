@@ -13,6 +13,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface User {
     _id: string;
     email: string;
+    displayName: string;
+    avatarUrl?: string;
     isOnline: boolean;
     unreadCount?: number;
 }
@@ -163,6 +165,11 @@ const ChatPage: React.FC = () => {
         { icon: <HelpCircle className="w-5 h-5" />, label: 'Skygram Help', onClick: () => console.log('Help') },
     ];
 
+    const getAvatarPath = (path?: string) => {
+        if (!path) return null;
+        return `http://localhost:3000${path}`;
+    };
+
     return (
         <div className="flex h-screen bg-slate-50 overflow-hidden relative font-sans text-slate-900">
             {/* Side Menu Drawer Overlay */}
@@ -185,8 +192,12 @@ const ChatPage: React.FC = () => {
                         >
                             <div className="p-6 bg-sky-600 text-white">
                                 <div className="flex justify-between items-start mb-6">
-                                    <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center font-bold text-2xl border border-white/30">
-                                        {user?.email[0].toUpperCase()}
+                                    <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center font-bold text-2xl border border-white/30 overflow-hidden">
+                                        {user?.avatarUrl ? (
+                                            <img src={getAvatarPath(user.avatarUrl)!} alt="Me" className="w-full h-full object-cover" />
+                                        ) : (
+                                            user?.displayName?.[0].toUpperCase() || user?.email[0].toUpperCase()
+                                        )}
                                     </div>
                                     <button
                                         onClick={() => setIsSideMenuOpen(false)}
@@ -196,7 +207,7 @@ const ChatPage: React.FC = () => {
                                     </button>
                                 </div>
                                 <div className="space-y-1">
-                                    <h3 className="font-bold text-lg truncate">{user?.email.split('@')[0]}</h3>
+                                    <h3 className="font-bold text-lg truncate">{user?.displayName || user?.email.split('@')[0]}</h3>
                                     <p className="text-sky-100 text-xs truncate opacity-80">{user?.email}</p>
                                 </div>
                             </div>
@@ -258,9 +269,13 @@ const ChatPage: React.FC = () => {
                                 }`}
                         >
                             <div className="relative">
-                                <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-sm ${selectedUser?._id === u._id ? 'bg-sky-600' : 'bg-slate-300'
+                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-sm overflow-hidden ${selectedUser?._id === u._id ? 'bg-sky-600' : 'bg-slate-300'
                                     }`}>
-                                    {u.email[0].toUpperCase()}
+                                    {u.avatarUrl ? (
+                                        <img src={getAvatarPath(u.avatarUrl)!} alt={u.displayName} className="w-full h-full object-cover" />
+                                    ) : (
+                                        (u.displayName?.[0] || u.email[0]).toUpperCase()
+                                    )}
                                 </div>
                                 <div
                                     className={`absolute bottom-0.5 right-0.5 w-3.5 h-3.5 rounded-full border-2 border-white ${u.isOnline ? 'bg-green-500' : 'bg-slate-400'
@@ -270,7 +285,7 @@ const ChatPage: React.FC = () => {
                             <div className="ml-4 flex-1 overflow-hidden">
                                 <div className="flex justify-between items-center mb-0.5">
                                     <span className={`text-[14.5px] font-bold truncate ${selectedUser?._id === u._id ? 'text-sky-900' : 'text-slate-700'}`}>
-                                        {u.email.split('@')[0]}
+                                        {u.displayName || u.email.split('@')[0]}
                                     </span>
                                     {(u.unreadCount ?? 0) > 0 && (
                                         <span className="bg-sky-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full min-w-[20px] text-center shadow-sm">
@@ -299,14 +314,18 @@ const ChatPage: React.FC = () => {
                             </button>
 
                             <div className="relative flex-shrink-0">
-                                <div className="w-11 h-11 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-lg">
-                                    {selectedUser.email[0].toUpperCase()}
+                                <div className="w-11 h-11 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center font-bold text-lg overflow-hidden">
+                                    {selectedUser.avatarUrl ? (
+                                        <img src={getAvatarPath(selectedUser.avatarUrl)!} alt={selectedUser.displayName} className="w-full h-full object-cover" />
+                                    ) : (
+                                        (selectedUser.displayName?.[0] || selectedUser.email[0]).toUpperCase()
+                                    )}
                                 </div>
                                 <div className={`absolute bottom-[-4px] right-[-4px] w-3.5 h-3.5 rounded-full border-2 border-white ${selectedUser.isOnline ? 'bg-green-500' : 'bg-slate-300'
                                     }`} />
                             </div>
                             <div className="ml-4 overflow-hidden">
-                                <h3 className="font-bold text-slate-800 leading-tight truncate">{selectedUser.email.split('@')[0]}</h3>
+                                <h3 className="font-bold text-slate-800 leading-tight truncate">{selectedUser.displayName || selectedUser.email.split('@')[0]}</h3>
                                 <span className={`text-[10px] font-extrabold uppercase tracking-widest ${selectedUser.isOnline ? 'text-green-600' : 'text-slate-400'}`}>
                                     {selectedUser.isOnline ? 'Online' : 'Offline'}
                                 </span>

@@ -10,7 +10,7 @@ export class AuthService {
         private jwtService: JwtService,
     ) { }
 
-    async register(email: string, pass: string) {
+    async register(email: string, pass: string, displayName: string, avatarUrl?: string) {
         const existingUser = await this.usersService.findByEmail(email);
         if (existingUser) {
             throw new ConflictException('Email already exists');
@@ -20,6 +20,8 @@ export class AuthService {
         const user = await this.usersService.create({
             email,
             password: hashedPassword,
+            displayName,
+            avatarUrl,
         });
 
         return this.login(user);
@@ -41,6 +43,8 @@ export class AuthService {
             user: {
                 id: user._id,
                 email: user.email,
+                displayName: user.displayName,
+                avatarUrl: user.avatarUrl,
                 isOnline: user.isOnline,
             },
         };
