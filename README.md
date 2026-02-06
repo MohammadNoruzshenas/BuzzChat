@@ -1,6 +1,6 @@
-# 🐝 BuzzChat - Real-Time Messaging Platform
+# ☁️ Skygram - Real-Time Messaging Platform
 
-BuzzChat is a modern, full-stack real-time chat application built to provide seamless communication. It leverages the power of WebSockets for instant messaging and features a clean, responsive UI.
+Skygram is a modern, full-stack real-time chat application built to provide seamless communication. It leverages the power of WebSockets for instant messaging and features a clean, responsive UI.
 
 ## 🚀 Features
 
@@ -35,8 +35,8 @@ BuzzChat is a modern, full-stack real-time chat application built to provide sea
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/MohammadNoruzshenas/BuzzChat.git
-cd BuzzChat
+git clone https://github.com/MohammadNoruzshenas/Skygram.git
+cd Skygram
 ```
 
 ### 2. Backend Setup
